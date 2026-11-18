@@ -1,81 +1,88 @@
-# Ulfat-e-Nikah (اُلفتِ نکاح) — Digital Nikkah Invitation
+# Ulfat-e-Nikah (اُلفتِ نکاح) — Digital Nikkah Invitation Website
 
-A mobile-first, animated digital Nikkah invitation crafted for sharing on WhatsApp and deploying effortlessly to GitHub Pages.
-
-## Features
-
-- **Luxury 3D Envelope Opening**: Interactive wax-seal and 3D-perspective envelope reveal with floating rose petals.
-- **Editorial Typography & Botanical Artwork**: Warm ivory paper palette with watercolor botanical arch framing, Islamic calligraphy (`Bismillah`), and animated couple reveal.
-- **Real Interactive Scratch-to-Reveal Heart**: Touch- and mouse-compatible HTML5 Canvas scratch foil revealing the wedding date (`23rd December 2026`), paired with an accessible fallback button.
-- **Event Timings & Google Maps**: Clear Nikkah (`8:00 PM`) and Dinner (`9:00 PM`) timings, copyable address, `.ics` calendar export, and direct Google Maps link (`OPEN IN MAPS`).
-- **One-Tap RSVP**: Direct `tel:` dialing and properly formatted international WhatsApp RSVP (`+92` without leading zero).
-- **Graceful Background Audio**: Starts gently after opening the invitation, with a floating mute/unmute toggle and safe fallback if `public/audio/wedding-music.mp3` is not supplied.
-- **WhatsApp Link Preview Ready**: Configured with Open Graph (`og:title`, `og:description`, `og:image`), Twitter metadata, and `public/og-preview.jpg` (`1200×630`).
+A mobile-first, animated digital Nikkah invitation **web application** crafted for sharing on WhatsApp and deploying directly to **GitHub Pages**.
 
 ---
 
-## Customize Invitation Details
+## Overview
 
-All names, dates, timings, venue details, phone numbers, and metadata live in one centralized file:
-
-```
-src/data/weddingData.ts
-```
-
-Update `weddingData` to change any detail without editing UI components.
-
-### Optional Background Music
-
-Place an MP3 file at:
-
-```
-public/audio/wedding-music.mp3
-```
-
-If no MP3 is provided, the invitation works normally without errors and plays a subtle ambient chime when sound is enabled.
-
-### WhatsApp Preview Image
-
-A `1200×630` preview image is included at `public/og-preview.jpg`. You may replace it with a custom image at the exact same path (`public/og-preview.jpg`) without modifying code.
+- **Stack**: React 19, TypeScript, Vite 8, Tailwind CSS v4, Motion
+- **Interactive Experience**: 3D wax-seal envelope opening, Arabic *Bismillah* calligraphy, animated couple reveal, HTML5 Canvas scratch-to-reveal heart (`23rd December 2026`), event timings, Google Maps location button, direct phone & WhatsApp RSVP, and graceful background audio.
+- **Centralized Data**: All invitation details (names, dates, timings, venue, address, phone/WhatsApp, Open Graph metadata) are managed in `src/data/weddingData.ts`.
 
 ---
 
-## Local Development
+## Run Locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Build for production:
+Open `http://localhost:3000` in your browser.
+
+---
+
+## Build for Production
 
 ```bash
+npm run lint
 npm run build
 ```
 
----
-
-## DEPLOY TO GITHUB PAGES
-
-1. Create a new GitHub repository and push this project to the `main` branch:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial Nikkah invitation"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
-   git push -u origin main
-   ```
-2. On GitHub, open your repository **Settings → Pages**.
-3. Under **Build and deployment → Source**, select **GitHub Actions**.
-4. The workflow in `.github/workflows/deploy.yml` will run automatically on push, build `dist/`, and publish your live invitation URL (`https://YOUR-USERNAME.github.io/YOUR-REPO/`).
+The production static website is generated in the `dist/` directory (including `dist/index.html`, `dist/404.html`, bundled assets, `og-preview.jpg`, and `favicon.svg`).
 
 ---
 
-## Custom Domain Setup (Optional)
+## Deploy to GitHub Pages
 
-To attach a custom domain such as `YOUR-DOMAIN.COM`:
+This project uses the official GitHub Actions → GitHub Pages workflow (`.github/workflows/deploy.yml`).
 
-1. Copy `CNAME.example` to `public/CNAME` and replace `YOUR-DOMAIN.COM` with your actual domain name (one line, no `https://`).
-2. Update the `<link rel="canonical">`, `og:url`, and absolute `og:image` / `twitter:image` URLs in `index.html` to match `https://YOUR-DOMAIN.COM/`.
-3. Point your domain's DNS `A` / `CNAME` records to GitHub Pages in your registrar, then enable HTTPS in **Settings → Pages**.
+### Required GitHub Repository Setting
+
+1. Push the repository to GitHub on the `main` (or `master`) branch.
+2. Open your repository on GitHub:
+   **GitHub Repository → Settings → Pages → Build and deployment → Source: GitHub Actions**
+3. Every push to `main` / `master` (or manual run via **Actions → Build and Deploy Nikkah Invitation Website to GitHub Pages → Run workflow**) will automatically install dependencies, type-check, build `dist/`, and publish your site.
+
+### Live Website URL
+
+Once deployed, your public invitation link will be:
+
+```text
+https://USERNAME.github.io/Ulfat-e-Nikkah/
+```
+
+*(Replace `USERNAME` with your GitHub username and `Ulfat-e-Nikkah` with your repository name if renamed. The build workflow detects the repository base path automatically via `actions/configure-pages`.)*
+
+---
+
+## WhatsApp Sharing & Open Graph Setup
+
+- `index.html` includes `og:title`, `og:description`, `og:image`, Twitter Card metadata, `theme-color`, and a botanical SVG `favicon.svg`.
+- `public/og-preview.jpg` provides a `1200×630` social preview image.
+- During GitHub Pages deployment, `vite.config.ts` automatically injects the live HTTPS `og:url`, `canonical`, and absolute `og:image` URLs so WhatsApp link previews display cleanly without pointing to any development URL.
+
+---
+
+## Optional Custom Domain
+
+`CNAME.example` is provided as a template and is **not** deployed automatically so your default `github.io` URL works out of the box.
+
+To use a custom domain later:
+
+1. Copy `CNAME.example` to `public/CNAME` and enter your domain (for example, `eman-saud.com`) on a single line without `https://`.
+2. Configure your domain's DNS records (`A` or `CNAME`) to point to GitHub Pages.
+3. Enable **Enforce HTTPS** under **Settings → Pages**.
+
+---
+
+## Optional Background Music
+
+Place an MP3 file at:
+
+```text
+public/audio/wedding-music.mp3
+```
+
+If no MP3 is added, the invitation works without errors and plays a gentle ambient chime when the visitor unmutes sound.
